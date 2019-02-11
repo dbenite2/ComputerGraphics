@@ -60,11 +60,11 @@ public class Clipping extends JPanel implements MouseListener{
             int y2 = line.y2;
             int dx = x2 - x1, dy = y2 - y1;
             int p[] = {-dx, dx, -dy, dy};
-             int [] q = new int[4]; 
-             q[0] = x1 - mousexMin; // Left mousexMax - x1, y1 - mouseyMin, mouseyMax - y1
-             q[1] = mousexMax - x1; // right
-             q[2] = y1 - mouseyMin; // bottom
-             q[3] = mouseyMax - y1; // top
+            int [] q = new int[4]; 
+            q[0] = x1 - mousexMin; // Left mousexMax - x1, y1 - mouseyMin, mouseyMax - y1
+            q[1] = mousexMax - x1; // right
+            q[2] = y1 - mouseyMin; // bottom
+            q[3] = mouseyMax - y1; // top
             //int q[] = {x1 - xMin, xMax - x1, y1 - yMin, yMax - y1}; //Arreglo con cuadrado fijo
             
             
