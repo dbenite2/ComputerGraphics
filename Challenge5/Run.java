@@ -19,7 +19,7 @@ import javax.swing.JFrame;
 import java.util.Random; 
 
 
-public class Main {
+public class Run {
 
     // static class Punto{
     //     private int x;
@@ -66,7 +66,7 @@ public class Main {
         String helper = currentDirFile.getAbsolutePath();
         System.out.println(helper);
         String currentDir = helper.substring(0, helper.length() - 1);
-        String fileName = currentDir + "Challenge4/test3d.txt";
+        String fileName = currentDir + "Challenge5/test3d.txt";
         List l = readFileInList(fileName);
         Iterator<String> itr = l.iterator();
         int n = Integer.parseInt(itr.next());
@@ -95,7 +95,7 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Agregar un JPanel que se llama Points (esta clase)
         //frame.add(new Points());
-        frame.add(new Gancho(arrPunt3d, arrDirs));
+        frame.add(new Darwing(arrPunt3d, arrDirs));
         // Asignarle tamaño
         frame.setSize(500, 500);
         // Poner el frame en el centro de la pantalla

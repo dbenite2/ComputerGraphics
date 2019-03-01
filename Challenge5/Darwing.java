@@ -21,14 +21,14 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.JFrame;
 import java.util.Random; 
 
-public class Gancho extends JPanel implements KeyListener{
+public class Darwing extends JPanel implements KeyListener{
 
     private Point [] arrPoints;
     private Point [] arrDirs;
     private Points2 [] arrDirs3d;
     private Points2 [] arrPoints3d;
 
-    public Gancho (Points2 [] arrPoints3d, Point [] arrDirs){
+    public Darwing (Points2 [] arrPoints3d, Point [] arrDirs){
         this.arrPoints3d = arrPoints3d;
         this.arrDirs = arrDirs;
         this.setFocusable(true);
@@ -81,29 +81,60 @@ public class Gancho extends JPanel implements KeyListener{
             Points3 temp = new Points3(this.arrPoints3d[i].inArr(0),this.arrPoints3d[i].inArr(1),this.arrPoints3d[i].inArr(2) , 1);
             Points3 res = Matrix4x4.times1(newMatrix, temp);
             this.arrPoints3d[i] = new Points2((int) Math.round(res.inArr(0)), (int) Math.round(res.inArr(1)), (int) Math.round(res.inArr(2)));
+            //System.out.println(this.arrPoints3d[i].inArr(0) + " " + this.arrPoints3d[i].inArr(1) + " " + this.arrPoints3d[i].inArr(2));
+        }
+        //paintG(g2d);
+    }
+
+    public void scaling(double sx, double sy, double sz){
+        //g2d.setColor(Color.RED);
+        //Matrix3x3 newMatrix = new Matrix3x3(sx, 0, 0, 0, sy, 0, 0, 0, 1);
+        Matrix4x4 newMatrix = new Matrix4x4(sx, 0, 0, 0, 0, sy, 0, 0, 0, 0, sz, 0, 0, 0, 0, 1);
+        for (int i = 0; i < this.arrPoints3d.length; i++){
+            Points3 temp = new Points3(this.arrPoints3d[i].inArr(0),this.arrPoints3d[i].inArr(1),this.arrPoints3d[i].inArr(2) , 1);
+            Points3 res = Matrix4x4.times1(newMatrix, temp);
+            //this.arrPoints[i] = new Point((int) Math.round(res.inArr(0)), (int) Math.round(res.inArr(1)));
+            this.arrPoints3d[i] = new Points2((int) Math.round(res.inArr(0)), (int) Math.round(res.inArr(1)), (int) Math.round(res.inArr(2)));
             System.out.println(this.arrPoints3d[i].inArr(0) + " " + this.arrPoints3d[i].inArr(1) + " " + this.arrPoints3d[i].inArr(2));
         }
         //paintG(g2d);
     }
-
-    public void scaling(double sx, double sy){
-        //g2d.setColor(Color.RED);
-        Matrix3x3 newMatrix = new Matrix3x3(sx, 0, 0, 0, sy, 0, 0, 0, 1);
-        for (int i = 0; i < this.arrPoints.length; i++){
-            Points2 temp = new Points2(this.arrPoints[i].getX(),this.arrPoints[i].getY() , 1);
-            Points2 res = Matrix3x3.times1(newMatrix, temp);
-            this.arrPoints[i] = new Point((int) Math.round(res.inArr(0)), (int) Math.round(res.inArr(1)));
+    /**
+     * Rotacion a en torno al eje z
+     */
+    public void rotationZ(double x){
+        double radians = Math.toRadians(x);
+        Matrix4x4 newMatrix = new Matrix4x4(Math.cos(radians), -Math.sin(radians), 0, 0, Math.sin(radians), Math.cos(radians), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        for (int i = 0; i < this.arrPoints3d.length; i++){
+            Points3 temp = new Points3(this.arrPoints3d[i].inArr(0),this.arrPoints3d[i].inArr(1),this.arrPoints3d[i].inArr(2) , 1);
+            Points3 res = Matrix4x4.times1(newMatrix, temp);
+            this.arrPoints3d[i] = new Points2((int) Math.round(res.inArr(0)), (int) Math.round(res.inArr(1)), (int) Math.round(res.inArr(2)));
         }
-        //paintG(g2d);
     }
 
-    public void rotation(double x){
+    /**
+     * Rotacion a en torno al eje y
+     */
+    public void rotationY(double x){
         double radians = Math.toRadians(x);
-        Matrix3x3 newMatrix = new Matrix3x3(Math.cos(radians), Math.sin(radians), 0, -Math.sin(radians), Math.cos(radians), 0, 0, 0, 1);
-        for (int i = 0; i < this.arrPoints.length; i++){
-            Points2 temp = new Points2(this.arrPoints[i].getX(),this.arrPoints[i].getY() , 1);
-            Points2 res = Matrix3x3.times1(newMatrix, temp);
-            this.arrPoints[i] = new Point((int) Math.round(res.inArr(0)), (int) Math.round(res.inArr(1)));
+        Matrix4x4 newMatrix = new Matrix4x4(Math.cos(radians), 0, Math.sin(radians), 0, 0, 1, 0, 0, -Math.sin(radians), 0, Math.cos(radians), 0, 0, 0, 0, 1);
+        for (int i = 0; i < this.arrPoints3d.length; i++){
+            Points3 temp = new Points3(this.arrPoints3d[i].inArr(0),this.arrPoints3d[i].inArr(1),this.arrPoints3d[i].inArr(2) , 1);
+            Points3 res = Matrix4x4.times1(newMatrix, temp);
+            this.arrPoints3d[i] = new Points2((int) Math.round(res.inArr(0)), (int) Math.round(res.inArr(1)), (int) Math.round(res.inArr(2)));
+        }
+    }
+
+    /**
+     * Rotacion a en torno al eje x
+     */
+    public void rotationX(double x){
+        double radians = Math.toRadians(x);
+        Matrix4x4 newMatrix = new Matrix4x4(1, 0, 0, 0, 0, Math.cos(radians), -Math.sin(radians), 0, 0, Math.sin(radians), Math.cos(radians), 0, 0, 0, 0, 1);
+        for (int i = 0; i < this.arrPoints3d.length; i++){
+            Points3 temp = new Points3(this.arrPoints3d[i].inArr(0),this.arrPoints3d[i].inArr(1),this.arrPoints3d[i].inArr(2) , 1);
+            Points3 res = Matrix4x4.times1(newMatrix, temp);
+            this.arrPoints3d[i] = new Points2((int) Math.round(res.inArr(0)), (int) Math.round(res.inArr(1)), (int) Math.round(res.inArr(2)));
         }
     }
     
@@ -136,16 +167,28 @@ public class Gancho extends JPanel implements KeyListener{
             traslation(-20, 0, 0);
             repaint();
         } else if(tecla == KeyEvent.VK_A){
-            rotation(-5);
+            rotationX(-5);
             repaint();
         } else if(tecla == KeyEvent.VK_S){
-            scaling(0.5, 0.5);
+            scaling(0.5, 0.5, 0.5);
             repaint();
         } else if(tecla == KeyEvent.VK_W){
-            scaling(2, 2);
+            scaling(2, 2, 2);
             repaint();
         } else if(tecla == KeyEvent.VK_D){
-            rotation(5);
+            rotationX(5);
+            repaint();
+        } else if(tecla == KeyEvent.VK_Z){
+            rotationZ(5);
+            repaint();
+        } else if(tecla == KeyEvent.VK_X){
+            rotationZ(-5);
+            repaint();
+        } else if(tecla == KeyEvent.VK_C){
+            rotationY(5);
+            repaint();
+        } else if(tecla == KeyEvent.VK_V){
+            rotationY(-5);
             repaint();
         }
         repaint();    
