@@ -53,7 +53,6 @@ public class Matrix4x4{
      */
 
     public static Points3 times1(Matrix4x4 matrix ,Points3 puntos){
-        
         Points3 solucion = new Points3(0, 0, 0, 0);
         for(int i = 0; i < matrix.getSizeRow();i++){
              
@@ -62,6 +61,7 @@ public class Matrix4x4{
                 solucion.sumArr(i, x);
             }
         }
+
  
         return solucion;
  

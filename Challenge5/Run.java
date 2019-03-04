@@ -64,9 +64,8 @@ public class Run {
     public static void main(String[] args) {
         File currentDirFile = new File(".");
         String helper = currentDirFile.getAbsolutePath();
-        System.out.println(helper);
         String currentDir = helper.substring(0, helper.length() - 1);
-        String fileName = currentDir + "Challenge5/test3d.txt";
+        String fileName = currentDir + "/test3d.txt";
         List l = readFileInList(fileName);
         Iterator<String> itr = l.iterator();
         int n = Integer.parseInt(itr.next());
