@@ -21,6 +21,10 @@ public class Points3{
         this.y = y;
         this.w = w;
         this.z = z;
+        this.arr[0] = x;
+        this.arr[1] = y;
+        this.arr[2] = w;
+        this.arr[3] = z;
     }
 
     public double getX(){
