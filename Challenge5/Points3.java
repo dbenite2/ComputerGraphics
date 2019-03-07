@@ -44,25 +44,25 @@ public class Points3{
     }
 
     public void setX(double x){
-
+        this.arr[0] = x;
         this.x = x;
         
     }
 
     public void setY(double y){
-
+        this.arr[1] = y;
         this.y = y;
         
     }
 
-    public void setW(double w){
-
+    public void setZ(double w){
+        this.arr[3] = w;
         this.w = w;
         
     }
 
-    public void setZ(double z){
-
+    public void setW(double z){
+        this.arr[0] = z;
         this.z = z;
     }
 

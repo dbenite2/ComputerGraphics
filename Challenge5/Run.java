@@ -21,30 +21,6 @@ import java.util.Random;
 
 public class Run {
 
-    // static class Punto{
-    //     private int x;
-    //     private int y;
-
-    //     public Punto(int x, int y){
-    //         this.x = x;
-    //         this.y = y;
-    //     }
-
-    //     /**
-    //      * @return the x
-    //      */
-    //     public int getX() {
-    //         return x;
-    //     }
-
-    //     /**
-    //      * @return the y
-    //      */
-    //     public int getY() {
-    //         return y;
-    //     }
-    // }
-
     public static List<String> readFileInList(String fileName) { 
         List<String> lines = Collections.emptyList(); 
     try

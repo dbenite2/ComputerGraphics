@@ -27,6 +27,7 @@ public class Darwing extends JPanel implements KeyListener{
     private Point [] arrDirs;
     private Points2 [] arrDirs3d;
     private Points2 [] arrPoints3d;
+    private Double DISTANCE = -1100d;
 
     public Darwing (Points2 [] arrPoints3d, Point [] arrDirs){
         this.arrPoints3d = arrPoints3d;
@@ -45,12 +46,9 @@ public class Darwing extends JPanel implements KeyListener{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+        persp(DISTANCE);
         paintG(g2d);
         axis(g2d);
-        //traslation(g2d, 20, 20);
-        //Dimension size = getSize();
-        
-
     }
 
     public void axis(Graphics2D g2d) {
@@ -61,27 +59,28 @@ public class Darwing extends JPanel implements KeyListener{
     }
 
     public void paintG(Graphics2D g2d){
+        System.out.println("Puntos Actuales");
         for(int i = 0; i < arrDirs.length; i++){
             Point s = arrDirs[i];
             int init = s.getX();
             int end = s.getY();
             g2d.setColor(Color.BLACK);
-            g2d.drawLine((int) Math.round(this.arrPoints3d[init].getX() + 250)  , (int) Math.round(250 - this.arrPoints3d[init].getY()) , (int) Math.round(this.arrPoints3d[end].getX() + 250)  , (int) Math.round(250 - this.arrPoints3d[end].getY()) );
-            //Points2 p1 = new Points2(arrPoints[init].getX(), arrPoints[init].getY(), 1);
-            //Points2 p2 = new Points2(arrPoints[end].getX(), arrPoints[end].getY(), 1);
-            //traslation(p1, p2, g2d);
+            g2d.drawLine((int) Math.round(this.arrPoints3d[init].getX() + 250)  , (int) Math.round(250 - this.arrPoints3d[init].getY()) , (int) Math.round(this.arrPoints3d[end].getX() + 250)  , (int) Math.round(250 - this.arrPoints3d[end].getY()));
+            System.out.println(this.arrPoints3d[i].inArr(0)+" "+this.arrPoints3d[i].inArr(1)+" "+this.arrPoints3d[i].inArr(2));
         } 
+
     }
 
     public void traslation(double dx, double dy, double dz){
         
         Matrix4x4 newMatrix = new Matrix4x4(1, 0, 0, dx, 0, 1, 0, dy, 0, 0, 1, dz, 0, 0, 0, 1);
+        System.out.println("Translación");
         for (int i = 0; i < this.arrPoints3d.length; i++){
             Points3 temp = new Points3(this.arrPoints3d[i].inArr(0),this.arrPoints3d[i].inArr(1),this.arrPoints3d[i].inArr(2) , 1);
             Points3 res = Matrix4x4.times1(newMatrix, temp);
             this.arrPoints3d[i] = new Points2((int) Math.round(res.inArr(0)), (int) Math.round(res.inArr(1)), (int) Math.round(res.inArr(2)));
+            //System.out.println(this.arrPoints3d[i].inArr(0)+" "+this.arrPoints3d[i].inArr(1)+" "+this.arrPoints3d[i].inArr(2));
         }
-        //paintG(g2d);
     }
 
     public void scaling(double sx, double sy, double sz){
@@ -94,6 +93,22 @@ public class Darwing extends JPanel implements KeyListener{
             this.arrPoints3d[i] = new Points2((int) Math.round(res.inArr(0)), (int) Math.round(res.inArr(1)), (int) Math.round(res.inArr(2)));
         }
         traslation(tempT.inArr(0), tempT.inArr(1), tempT.inArr(2));
+    }
+
+    public void persp (double d){
+        Matrix4x4 newMatrix = new Matrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1/d, 0);
+        for (int i = 0; i < this.arrPoints3d.length; i++){
+            Points3 temp = new Points3(this.arrPoints3d[i].inArr(0),this.arrPoints3d[i].inArr(1),this.arrPoints3d[i].inArr(2) , this.arrPoints3d[i].inArr(2)/d);
+            Points3 res = Matrix4x4.times1(newMatrix, temp);
+            //System.out.println();
+            this.arrPoints3d[i] = new Points2((int) Math.round(res.inArr(0)), (int) Math.round(res.inArr(1)), (int) Math.round(res.inArr(2)));
+        }
+        for (int j = 0; j < this.arrPoints3d.length; j++){
+            this.arrPoints3d[j].setX(this.arrPoints3d[j].inArr(0)/(this.arrPoints3d[j].inArr(2)/d));
+            this.arrPoints3d[j].setY(this.arrPoints3d[j].inArr(1)/(this.arrPoints3d[j].inArr(2)/d));
+            //this.arrPoints3d[i].setZ(this.arrPoints3d[i].inArr(2)/(this.arrPoints3d[i].inArr(2)/d));
+            this.arrPoints3d[j].setW(this.arrPoints3d[j].inArr(2)/(this.arrPoints3d[j].inArr(2)/d));
+        }
     }
     /**
      * Rotacion a en torno al eje z
@@ -133,7 +148,6 @@ public class Darwing extends JPanel implements KeyListener{
             Points3 temp = new Points3(this.arrPoints3d[i].inArr(0),this.arrPoints3d[i].inArr(1),this.arrPoints3d[i].inArr(2) , 1);
             Points3 res = Matrix4x4.times1(newMatrix, temp);
             this.arrPoints3d[i] = new Points2((int) Math.round(res.inArr(0)), (int) Math.round(res.inArr(1)), (int) Math.round(res.inArr(2)));
-            System.out.println(this.arrPoints3d[i].inArr(0) + " " + this.arrPoints3d[i].inArr(1) + " " + this.arrPoints3d[i].inArr(2));
         }
     }
 
@@ -168,54 +182,78 @@ public class Darwing extends JPanel implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         int tecla = e.getKeyCode();
-        //System.out.println("Key pressed");
-        if(tecla == KeyEvent.VK_UP) {
-            traslation(0, 5, 0);
-            repaint();
-        } else if (tecla == KeyEvent.VK_DOWN) {
-            traslation(0,-5, 0);
-            repaint();
-        } else if(tecla == KeyEvent.VK_LEFT) {
-            traslation(-20, 0, 0);
-            repaint();
-        } else if (tecla == KeyEvent.VK_RIGHT) {
-            traslation(20, 0, 0);
-            repaint();
-        } else if (tecla == KeyEvent.VK_M) {
-            traslation(0, 0, 20);
-            repaint();
-        }
-        else if (tecla == KeyEvent.VK_N) {
-            traslation(0, 0, -20);
-            repaint();
-        }
-        else if(tecla == KeyEvent.VK_A){
-            rotationX(-5);
-            repaint();
-        } else if(tecla == KeyEvent.VK_J){
-            scaling(0.5, 0.5, 0.5);
-            repaint();
-        } else if(tecla == KeyEvent.VK_L){
-            scaling(2, 2, 2);
-            repaint();
-        } else if(tecla == KeyEvent.VK_D){
-            rotationX(5);
-            repaint();
-        } else if(tecla == KeyEvent.VK_Q){
-            rotationZ(5);
-            repaint();
-        } else if(tecla == KeyEvent.VK_E){
-            rotationZ(-5);
-            repaint();
-        } else if(tecla == KeyEvent.VK_W){
-            rotationY(5);
-            repaint();
-        } else if(tecla == KeyEvent.VK_S){
-            rotationY(-5);
-            repaint();
-        } else if(tecla == KeyEvent.VK_Y){
-            reset();
-            repaint();
+        switch (tecla) {
+            case KeyEvent.VK_UP: 
+                traslation(0, 5, 0);
+                repaint();
+                break;
+
+            case KeyEvent.VK_DOWN: 
+                traslation(0, -5, 0);
+                repaint();
+                break;
+
+            case KeyEvent.VK_LEFT: 
+                traslation(-20, 0, 0);
+                repaint();
+                break;
+
+            case KeyEvent.VK_RIGHT: 
+                traslation(20, 0, 0);
+                repaint();
+                break;
+
+            case KeyEvent.VK_M: 
+                traslation(0, 0, 200);
+                repaint();
+                break;
+
+            case KeyEvent.VK_N: 
+                traslation(0, 0, -200);
+                repaint();
+                break;
+            case KeyEvent.VK_A: 
+                rotationX(-5);
+                repaint();
+                break;
+            case KeyEvent.VK_J: 
+                scaling(0.5, 0.5, 0.5);
+                repaint();
+                break;
+            case KeyEvent.VK_L: 
+                scaling(2, 2, 2);   
+                repaint();
+                break;
+            case KeyEvent.VK_D: 
+                rotationX(5);
+                repaint();
+                break;
+            case KeyEvent.VK_Q: 
+                rotationZ(5);
+                repaint();
+                break;
+            case KeyEvent.VK_E: 
+                rotationZ(-5);;
+                repaint();
+                break;
+            case KeyEvent.VK_W: 
+                rotationY(5);
+                repaint();
+                break;
+            case KeyEvent.VK_S: 
+                rotationY(-5);
+                repaint();
+                break;
+            case KeyEvent.VK_H: 
+                persp(DISTANCE += 30);
+                repaint();
+                break;
+            case KeyEvent.VK_G: 
+                persp(DISTANCE -= 30);
+                repaint();
+                break;   
+        } if (tecla != KeyEvent.VK_H && tecla != KeyEvent.VK_G){
+            persp(DISTANCE);
         }
         repaint();    
     }
