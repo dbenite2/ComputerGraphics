@@ -26,8 +26,17 @@ public class Uvn extends Matrix4x4 {
         y = Vector4.dotProduct(Vector4.minus(v), from);
         z = Vector4.dotProduct(Vector4.minus(n), from);
 
-        Matrix4x4[0][0] = u.getX();Matrix4x4[0][1] = u.getY();Matrix4x4[0][2] = u.getZ();Matrix4x4[0][3] = x;
-        Matrix4x4[1][0] = v.getX();Matrix4x4[1][1] = v.getY();Matrix4x4[1][2] = v.getZ();Matrix4x4[1][3] = y();
-        Matrix4x4[2][0] = n.getX();Matrix4x4[2][1] = n.getY();Matrix4x4[2][2] = n.getZ();Matrix4x4[2][3] = z;
+        matrix4x4[0][0] = u.getX();
+        matrix4x4[0][1] = u.getY();
+        matrix4x4[0][2] = u.getZ();
+        matrix4x4[0][3] = x;
+        matrix4x4[1][0] = v.getX();
+        matrix4x4[1][1] = v.getY();
+        matrix4x4[1][2] = v.getZ();
+        matrix4x4[1][3] = y;
+        matrix4x4[2][0] = n.getX();
+        matrix4x4[2][1] = n.getY();
+        matrix4x4[2][2] = n.getZ();
+        matrix4x4[2][3] = z;
     }
 }

@@ -13,8 +13,8 @@ public class Projection extends Matrix4x4 {
 
     public Projection(double d){
         super();
-        Matrix[3][2] = 1/d;
-        Matrix4x4[3][3] = 0;
+        matrix4x4[3][2] = 1/d;
+        matrix4x4[3][3] = 0;
     }
 }
 

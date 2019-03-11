@@ -14,8 +14,8 @@ public class Translation extends Matrix4x4 {
 
     public Translation(double dx, double dy, double dz){
         super();
-        Matrix4x4[0][3] = dx;
-        Matrix4x4[1][3] = dy;
-        Matrix4x4[2][3] = dz;
+        matrix4x4[0][3] = dx;
+        matrix4x4[1][3] = dy;
+        matrix4x4[2][3] = dz;
     }
 }

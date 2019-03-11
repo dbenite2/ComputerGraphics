@@ -1,4 +1,5 @@
 package Geometry;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -25,9 +26,10 @@ import java.util.Random;
 import Math.Matrix4x4;
 import Math.Vector4;
 import Math.Projection;
+import Math.Translation;
 import Math.Uvn;
 
-public class DrawBoat extends Jpanel implements KeyListener {
+public class DrawBoat extends JPanel implements KeyListener {
 
     PolygonObject po;
     PolygonObject transformed;
@@ -73,7 +75,7 @@ public class DrawBoat extends Jpanel implements KeyListener {
         g2d = (Graphics2D) g;
         size = getSize();
 
-        g2d.setcolor(Color.RED);
+        g2d.setColor(Color.RED);
         drawOneLine(-DrawBoat.AXIS_SIZE, 0, DrawBoat.AXIS_SIZE, 0);
 
         g2d.setColor(Color.GREEN);
@@ -87,12 +89,12 @@ public class DrawBoat extends Jpanel implements KeyListener {
 
         applyProjection();
 
-        transformedObject.drawObject(this);
+        transformed.drawObject(this);
 
     }
 
     private void transformObject() {
-        transformedObject = PolygonObject.transformObject(po, currentTransformation);
+        transformed = PolygonObject.transformObject(po, actualTrans);
     }
 
     private void applyUVN() {
@@ -107,12 +109,12 @@ public class DrawBoat extends Jpanel implements KeyListener {
 
         Uvn uvnMat = new Uvn(cameraPos, objectCenter, V);
 
-        transformedObject = PolygonObject.transformObject(transformedObject, uvnMat);
+        transformed = PolygonObject.transformObject(transformed, uvnMat);
     }
 
     private void applyProjection() {
         Projection proj = new Projection(-proyectionPlaneDistance);
-        transformedObject = PolygonObject.transformObject(transformedObject, proj);
+        transformed = PolygonObject.transformObject(transformed, proj);
     }
 
     public void drawOneLine(int x1, int y1, int x2, int y2) {
@@ -138,6 +140,7 @@ public class DrawBoat extends Jpanel implements KeyListener {
             for (int i = 0; i < numVertices; i++) {
                 // Read a vertex
                 int x = in.nextInt();
+                System.out.println(x);
                 int y = in.nextInt();
                 int z = in.nextInt();
                 vertexArray[i] = new Vector4(x, y, z);
@@ -200,18 +203,18 @@ public class DrawBoat extends Jpanel implements KeyListener {
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_A) {        // Left
             Translation trans = new Translation(-10, 0, 0);
-            currentTransformation = Matrix4x4.times(currentTransformation, trans);
+            actualTrans = Matrix4x4.times2(actualTrans, trans);
           } else if(e.getKeyCode() == KeyEvent.VK_D) { // Right
             Translation trans = new Translation(10, 0, 0);
-            currentTransformation = Matrix4x4.times(currentTransformation, trans);
+            actualTrans = Matrix4x4.times2(actualTrans, trans);
           } else if(e.getKeyCode() == KeyEvent.VK_W) { // Up
             Translation trans = new Translation(0, 10, 0);
-            currentTransformation = Matrix4x4.times(currentTransformation, trans);
+            actualTrans = Matrix4x4.times2(actualTrans, trans);
           } else if(e.getKeyCode() == KeyEvent.VK_S) { // Down
             Translation trans = new Translation(0, -10, 0);
-            currentTransformation = Matrix4x4.times(currentTransformation, trans);
+            actualTrans = Matrix4x4.times2(actualTrans, trans);
           } else if(e.getKeyCode() == KeyEvent.VK_R) { // Reset
-            currentTransformation = new Matrix4x4();
+            actualTrans = new Matrix4x4();
           } else if(e.getKeyCode() == KeyEvent.VK_J) { // change longitude
             theta -= THETA_INCREMENT;
             if(theta <= - Math.PI) theta = - Math.PI;
@@ -239,6 +242,18 @@ public class DrawBoat extends Jpanel implements KeyListener {
           }
     }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+      System.out.println("Key typed");
+    }
+  
+    @Override
+    public void keyReleased(KeyEvent e) {
+      System.out.println("key released");
+      repaint();
+    }
+
+    
     public static void main(String[] args) {
         DrawBoat db = new DrawBoat();
 
@@ -250,11 +265,14 @@ public class DrawBoat extends Jpanel implements KeyListener {
         // Agregar un JPanel que se llama Points (esta clase)
         //frame.add(new Points());
         frame.add(db);
+        frame.addKeyListener(db);
         // Asignarle tamaño
-        frame.setSize(500, 500);
+        frame.setSize(600, 600);
         // Poner el frame en el centro de la pantalla
         frame.setLocationRelativeTo(null);
         // Mostrar el frame
         frame.setVisible(true);
     }
+
+ 
 }

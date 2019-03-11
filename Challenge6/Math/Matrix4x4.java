@@ -6,7 +6,7 @@ package Math;
 
 
 public class Matrix4x4{
-    private double[][] matrix4x4 = new double [4][4];
+    protected double[][] matrix4x4 = new double [4][4];
 
     public Matrix4x4(){
         for(int i = 0; i < 4; i++){
@@ -85,5 +85,23 @@ public class Matrix4x4{
  
             return new Matrix4x4(solMatrix);
         }
+    }
+
+    public static Vector4 times(Matrix4x4 matrix, Vector4 vector) {
+        double [] newVector = new double[4];
+        for(int i = 0; i < 4; i++) {
+            double acum = 0;
+            for(int j = 0; j < 4; j++) {
+                acum += matrix.getPoint(i,j)*vector.get(j);
+            }
+            newVector[i] = acum;
+        }
+        double w = newVector[3];
+        if(w != 1) {
+            for(int i = 0; i < 4; i++) {
+                newVector[i] = newVector[i]/w;
+            }
+        }
+        return new Vector4(newVector);
     }
 }

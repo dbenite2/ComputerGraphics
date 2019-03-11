@@ -6,7 +6,7 @@ package Geometry;
 
  import java.util.ArrayList;
  import Math.Matrix4x4;
- import math.Vector4;
+ import Math.Vector4;
 
  public class PolygonObject{
 
@@ -29,16 +29,16 @@ package Geometry;
     public void drawOneLine(DrawBoat db, Edge edge){
         int x1 = (int) edge.start.getX();
         int x2 = (int) edge.end.getX();
-        int y1 = (int) edge.start.gety();
-        int y2 = (int) edge.end.getX();
+        int y1 = (int) edge.start.getY();
+        int y2 = (int) edge.end.getY();
 
         db.drawOneLine(x1,y1,x2,y2);
     }
 
     public void transformObject(Matrix4x4 transformation){
         for(Edge e:edges){
-            e.start = Matrix4x4.times1(transformation, e.start);
-            e.end   = Matrix4x4.times1(transformation, e.end);
+            e.start = Matrix4x4.times(transformation, e.start);
+            e.end   = Matrix4x4.times(transformation, e.end);
         }
     }
 
@@ -50,6 +50,7 @@ package Geometry;
             Edge newEdge = new Edge(newStart, newEnd);
             newObject.addEdge(newEdge);
         }
+        return newObject;
     }
 
  }
