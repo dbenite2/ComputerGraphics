@@ -40,14 +40,12 @@ public class Shader {
             if(!Scene.intersectRayForShadow(shadowRay)) {
                 light.normalize();
                 // Acá se debe agregar el producto entre normal y light (***)
-                double scalar = material.Kd;
-                double result = Vector4.dotProduct(normal, light);
+                double result = Vector4.dotProduct(normal, light) * material.Kd;
                 // If dot product is < 0, the point is not receiving light from
                 // this source.
                 if(result < 0) result = 0;
-                if(scalar < 0) scalar = 0;
-                Colour DiffuseReflection = Colour.multiply(Colour.multiply(Colour.multiply(pl.color, material.color), 
-                        scalar),result);
+                Colour DiffuseReflection = Colour.multiply(Colour.multiply(pl.color, material.color), 
+                        result);
                 acum = Colour.add(acum, DiffuseReflection);
             }
         }
@@ -58,12 +56,11 @@ public class Shader {
             Vector4 observer =  new Vector4(point, new Point(0,0,0));
             reflex.normalize();
             observer.normalize();
-            double scalar = material.Ks;
-            double result = Math.pow(Vector4.dotProduct(reflex,observer),material.n);
+            //double scalar = material.Ks;
+            double result = Math.pow(Vector4.dotProduct(reflex,observer),material.n)* material.Ks;
             double lessLight = Vector4.dotProduct(normal, Vector4.multiply(-1, light));
-            if(scalar < 0 ) scalar = 0;
             if(lessLight < 0) result = 0;
-            Colour SpecularReflection = Colour.multiply(Colour.multiply(pl.color,scalar),result);
+            Colour SpecularReflection = Colour.multiply(pl.color,result);
             acum = Colour.add(acum,SpecularReflection);
             
             

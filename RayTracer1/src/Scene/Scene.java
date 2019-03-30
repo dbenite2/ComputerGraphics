@@ -42,6 +42,10 @@ public class Scene {
         pointLights.add(myPointLight);
     }
     
+    public static void removePointLight(){
+        pointLights.remove(0);
+    }
+    
     /**
      * Add a Sphere
      * @param mySphere Sphere to be added

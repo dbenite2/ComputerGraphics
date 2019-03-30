@@ -11,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import Math.Point;
 import Math.Sphere;
@@ -25,7 +27,7 @@ import Scene.Material;
  *
  * @author htrefftz
  */
-public class Main extends JPanel {
+public class Main extends JPanel implements KeyListener {
     Image image;
     private final boolean DEBUG = false;
     
@@ -67,6 +69,7 @@ public class Main extends JPanel {
         Sphere sp2 = new Sphere(new Point(0, 0, -100), 20, material1);
         //Scene.addIntersectable(sp1);
         Scene.addIntersectable(sp2);
+        
 
     }
     
@@ -84,6 +87,13 @@ public class Main extends JPanel {
         image = new Image(w, h);
         image.generateImage();      // Compute the colors of the scene
         this.setImage(image);
+        
+        Scene.removePointLight();
+        PointLight pl1 = new PointLight(new Point(l1x, l1y, l1z), new Colour(1, 1, 1));
+        //Scene.addPointLight(pl1);
+        Scene.addPointLight(pl1);
+        
+        
 
         
         Colour colour;
@@ -105,6 +115,37 @@ public class Main extends JPanel {
         }        
     }
     
+    @Override
+    public void keyPressed(KeyEvent e){
+        int key = e.getKeyCode();
+        switch(key){
+            case KeyEvent.VK_UP:
+                l1y += 10;
+                break;
+            case KeyEvent.VK_DOWN:
+                l1y -= 10;
+                break;                
+            case KeyEvent.VK_LEFT:
+                l1x -= 10;
+                break;
+            case KeyEvent.VK_RIGHT:
+                l1x += 10;
+                break;
+            case KeyEvent.VK_Z:
+                l1z += 10;
+                break;
+            case KeyEvent.VK_X:
+                l1z -= 10;
+                break;
+        }
+        //createScene();
+        repaint();
+    }
+    
+    @Override
+    public void keyReleased(KeyEvent e) {}
+    @Override
+    public void keyTyped(KeyEvent e) {}
     
     public static void main(String [] args) {
         JFrame frame = new JFrame("Ray Tracer 2019");
@@ -122,6 +163,7 @@ public class Main extends JPanel {
 
         // Draw the result
         frame.add(main);
+        frame.addKeyListener(main);
         frame.setSize(width, height);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
