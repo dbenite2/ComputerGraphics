@@ -2,7 +2,7 @@
 
 plane {
 	y, -2
-	pigment {checker Pink, White}	
+	pigment {hexagon Black, White, Red}	
 }
 
 sphere {
@@ -68,8 +68,15 @@ sphere {
     <10, 10, -10>
     color Yellow
   }
+  
+  
+  light_source{
+    <10,10,10>
+    color Blue
+  }
 
 camera {
-	location <0, 0, -10>
+	location <-5, 5, -10>
+	angle 90
 	look_at <0, 0, 0>	
 }
